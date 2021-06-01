@@ -69,7 +69,15 @@ const HighlightedText = memo(({ text = '', highlight = '', textProps }) => {
   );
 });
 
-export const UserSummary = ({ address, avatar, email, name, query, title }) => {
+export const UserSummary = ({
+  address,
+  avatar,
+  city,
+  email,
+  name,
+  query,
+  title,
+}) => {
   const { bookmarks, toggleBookmark } = useBookmarks();
   const isBookmarked = bookmarks?.includes(email);
 
@@ -106,7 +114,7 @@ export const UserSummary = ({ address, avatar, email, name, query, title }) => {
         <Gap />
         <View>
           <HighlightedText
-            text={address}
+            text={`${address}, ${city}`}
             highlight={query}
             textProps={subtitleProps}
           />
@@ -134,6 +142,7 @@ export const UserSummary = ({ address, avatar, email, name, query, title }) => {
 UserSummary.propTypes = {
   address: PropTypes.string.isRequired,
   avatar: PropTypes.string.isRequired,
+  city: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   query: PropTypes.string,

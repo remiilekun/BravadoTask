@@ -4,6 +4,7 @@ import styled from '@emotion/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { PageWrapper, UserCard, Searchbar } from '@components';
 import USERS from '@data/users';
+import { useDebounce } from '@hooks';
 
 const SearchbarWrapper = styled.View`
   margin-bottom: 20px;
@@ -15,6 +16,7 @@ const ItemSeparator = styled.View`
 
 const HomeScreen = ({ navigation }) => {
   const [query, setQuery] = useState('');
+  const debouncedQuery = useDebounce(query);
 
   const navigateToUrl = url => {
     if (url) {
@@ -46,12 +48,12 @@ const HomeScreen = ({ navigation }) => {
     if (USERS?.length) {
       return USERS?.filter(o =>
         Object.entries(o).some(entry =>
-          String(entry[1]).toLowerCase().includes(query),
+          String(entry[1]).toLowerCase().includes(debouncedQuery),
         ),
       );
     }
     return [];
-  }, [query]);
+  }, [debouncedQuery]);
 
   return (
     <SafeAreaView>
@@ -70,7 +72,7 @@ const HomeScreen = ({ navigation }) => {
             <TouchableOpacity
               activeOpacity={0.9}
               onPress={() => handleUserPress(item)}>
-              <UserCard summary={item} query={query} />
+              <UserCard summary={item} query={debouncedQuery} />
             </TouchableOpacity>
           )}
         />
