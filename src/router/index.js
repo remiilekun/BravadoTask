@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from '@screens/Home';
-import ViewPostScreen from '@screens/ViewPost';
+import ViewUserScreen from '@screens/ViewUser';
 
 const Stack = createStackNavigator();
 
@@ -12,7 +12,7 @@ function App() {
         headerShown: false,
       }}>
       <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="ViewPost" component={ViewPostScreen} />
+      <Stack.Screen name="ViewUser" component={ViewUserScreen} />
     </Stack.Navigator>
   );
 }

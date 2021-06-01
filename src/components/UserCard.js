@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from '@emotion/native';
-import { PostSummary } from './PostSummary';
+import { UserSummary } from './UserSummary';
 import { Text } from './Text';
 
 const Wrapper = styled.View`
@@ -19,10 +19,10 @@ const ContentDivider = styled.View`
   width: 100%;
 `;
 
-export const PostCard = ({ content, query, summary, ...props }) => {
+export const UserCard = ({ content, query, summary, ...props }) => {
   return (
     <Wrapper {...props}>
-      <PostSummary {...summary} query={query} />
+      <UserSummary {...summary} query={query} />
       {content ? (
         <>
           <ContentDivider />
@@ -35,7 +35,7 @@ export const PostCard = ({ content, query, summary, ...props }) => {
   );
 };
 
-PostCard.propTypes = {
+UserCard.propTypes = {
   content: PropTypes.string,
   summary: PropTypes.shape({
     address: PropTypes.string.isRequired,
@@ -46,6 +46,6 @@ PostCard.propTypes = {
   }).isRequired,
 };
 
-PostCard.defaultProps = {
+UserCard.defaultProps = {
   content: '',
 };

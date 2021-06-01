@@ -1,5 +1,5 @@
 export * from './PageWrapper';
-export * from './PostCard';
-export * from './PostSummary';
+export * from './UserCard';
+export * from './UserSummary';
 export * from './Searchbar';
 export * from './Text';

@@ -69,7 +69,7 @@ const HighlightedText = memo(({ text = '', highlight = '', textProps }) => {
   );
 });
 
-export const PostSummary = ({ address, avatar, email, name, query, title }) => {
+export const UserSummary = ({ address, avatar, email, name, query, title }) => {
   const { bookmarks, toggleBookmark } = useBookmarks();
   const isBookmarked = bookmarks?.includes(email);
 
@@ -131,7 +131,7 @@ export const PostSummary = ({ address, avatar, email, name, query, title }) => {
   );
 };
 
-PostSummary.propTypes = {
+UserSummary.propTypes = {
   address: PropTypes.string.isRequired,
   avatar: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired,
@@ -140,6 +140,6 @@ PostSummary.propTypes = {
   title: PropTypes.string.isRequired,
 };
 
-PostSummary.defaultProps = {
+UserSummary.defaultProps = {
   query: '',
 };

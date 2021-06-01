@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { FlatList, TouchableOpacity, Linking } from 'react-native';
 import styled from '@emotion/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { PageWrapper, PostCard, Searchbar } from '@components';
+import { PageWrapper, UserCard, Searchbar } from '@components';
 import USERS from '@data/users';
 
 const SearchbarWrapper = styled.View`
@@ -36,8 +36,8 @@ const HomeScreen = ({ navigation }) => {
     };
   }, [handleOpenURL]);
 
-  const handlePostPress = summary => {
-    navigation.navigate('ViewPost', {
+  const handleUserPress = summary => {
+    navigation.navigate('ViewUser', {
       summary,
     });
   };
@@ -69,8 +69,8 @@ const HomeScreen = ({ navigation }) => {
           renderItem={({ item }) => (
             <TouchableOpacity
               activeOpacity={0.9}
-              onPress={() => handlePostPress(item)}>
-              <PostCard summary={item} query={query} />
+              onPress={() => handleUserPress(item)}>
+              <UserCard summary={item} query={query} />
             </TouchableOpacity>
           )}
         />
