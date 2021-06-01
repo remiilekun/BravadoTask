@@ -6,7 +6,7 @@ import { pluckDeep } from '@lib/utils';
 export const Text = styled(props => (
   <RNText {...props} allowFontScaling={false} />
 ))`
-  color: ${({ theme, color = 'white' }) =>
+  color: ${({ theme, color = 'black' }) =>
     pluckDeep(color)(theme.colors) || color};
   font-family: ${({ theme, fontWeight }) =>
     theme.font.family[fontWeight || 'normal']};
