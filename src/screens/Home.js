@@ -1,10 +1,9 @@
-import React, { useState, useMemo } from 'react';
-import { FlatList, RefreshControl, TouchableOpacity } from 'react-native';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import { FlatList, TouchableOpacity, Linking } from 'react-native';
 import styled from '@emotion/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { PageWrapper, PostCard, Searchbar } from '@components';
-import { useQuery } from 'react-query';
-import axios from 'axios';
+import USERS from '@data/users';
 
 const SearchbarWrapper = styled.View`
   margin-bottom: 20px;
@@ -17,12 +16,25 @@ const ItemSeparator = styled.View`
 const HomeScreen = ({ navigation }) => {
   const [query, setQuery] = useState('');
 
-  const { isLoading, data, refetch } = useQuery('posts', async () => {
-    const { data: responseData } = await axios.get(
-      'https://gist.githubusercontent.com/allaud/093aa499998b7843bb10b44ea6ea02dc/raw/c400744999bf4b308f67807729a6635ced0c8644/users.json',
-    );
-    return responseData;
-  });
+  const navigateToUrl = url => {
+    if (url) {
+      const route = url.replace(/.*?:\/\//g, '');
+      const searchQuery = route.match(/\/([^\/]+)\/?$/)[1];
+      setQuery(searchQuery);
+    }
+  };
+
+  const handleOpenURL = useCallback(({ url }) => {
+    navigateToUrl(url);
+  }, []);
+
+  useEffect(() => {
+    Linking.getInitialURL().then(navigateToUrl);
+    Linking.addEventListener('url', handleOpenURL);
+    return () => {
+      Linking.removeEventListener('url', handleOpenURL);
+    };
+  }, [handleOpenURL]);
 
   const handlePostPress = summary => {
     navigation.navigate('ViewPost', {
@@ -30,17 +42,16 @@ const HomeScreen = ({ navigation }) => {
     });
   };
 
-  const filteredData = useMemo(() => {
-    if (data?.length) {
-      return data?.filter(o =>
+  const data = useMemo(() => {
+    if (USERS?.length) {
+      return USERS?.filter(o =>
         Object.entries(o).some(entry =>
           String(entry[1]).toLowerCase().includes(query),
         ),
       );
     }
-
     return [];
-  }, [data, query]);
+  }, [query]);
 
   return (
     <SafeAreaView>
@@ -50,18 +61,11 @@ const HomeScreen = ({ navigation }) => {
         </SearchbarWrapper>
 
         <FlatList
-          data={filteredData}
+          data={data}
           initialNumToRender={10}
           ItemSeparatorComponent={() => <ItemSeparator />}
           keyExtractor={item => item.email}
           removeClippedSubviews={true}
-          refreshControl={
-            <RefreshControl
-              refreshing={isLoading}
-              onRefresh={refetch}
-              tintColor="#000"
-            />
-          }
           renderItem={({ item }) => (
             <TouchableOpacity
               activeOpacity={0.9}

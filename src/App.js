@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect, useCallback } from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { Linking } from 'react-native';
 import styled from '@emotion/native';
 import { QueryClient, QueryClientProvider, setLogger } from 'react-query';
 import { NavigationContainer } from '@react-navigation/native';
 import { ThemeProvider } from '@emotion/react';
 import { BookmarkProvider } from '@contexts/BookmarkContext';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { navigationRef } from '@services/navigation';
 import Router from '@router';
 import theme from '@theme';
 
@@ -25,11 +27,11 @@ const App = () => {
     <StyledSafeArea>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>
-          <BookmarkProvider>
-            <NavigationContainer>
+          <NavigationContainer ref={navigationRef}>
+            <BookmarkProvider>
               <Router />
-            </NavigationContainer>
-          </BookmarkProvider>
+            </BookmarkProvider>
+          </NavigationContainer>
         </ThemeProvider>
       </QueryClientProvider>
     </StyledSafeArea>
