@@ -4,7 +4,7 @@ Frontend React Native Task
 
 ## Getting Started
 
-Ensure your envirionment is [setup](https://reactnative.dev/docs/environment-setup) for react-native development
+Ensure your environment is [setup](https://reactnative.dev/docs/environment-setup) for react-native development
 <br />
 
 1. Clone the repo

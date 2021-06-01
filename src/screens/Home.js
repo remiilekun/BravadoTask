@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { FlatList, TouchableOpacity, Linking } from 'react-native';
 import styled from '@emotion/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -16,7 +16,31 @@ const ItemSeparator = styled.View`
 
 const HomeScreen = ({ navigation }) => {
   const [query, setQuery] = useState('');
+  const [data, setData] = useState([]);
+  const [cache, setCache] = useState({});
   const debouncedQuery = useDebounce(query);
+
+  useEffect(() => {
+    if (USERS?.length) {
+      if (!debouncedQuery) {
+        setData([...USERS]);
+      } else if (cache[debouncedQuery]) {
+        setData([...cache[debouncedQuery]]);
+      } else {
+        const filtered = USERS?.filter(obj =>
+          Object.entries(obj).some(
+            ([key, value]) =>
+              key !== 'avatar' &&
+              String(value).toLowerCase().includes(debouncedQuery),
+          ),
+        );
+        setCache(v => ({ ...v, [debouncedQuery]: filtered }));
+        setData([...filtered]);
+      }
+    } else {
+      setData([]);
+    }
+  }, [debouncedQuery, cache]);
 
   const navigateToUrl = url => {
     if (url) {
@@ -44,17 +68,6 @@ const HomeScreen = ({ navigation }) => {
     });
   };
 
-  const data = useMemo(() => {
-    if (USERS?.length) {
-      return USERS?.filter(o =>
-        Object.entries(o).some(entry =>
-          String(entry[1]).toLowerCase().includes(debouncedQuery),
-        ),
-      );
-    }
-    return [];
-  }, [debouncedQuery]);
-
   return (
     <SafeAreaView>
       <PageWrapper>
@@ -67,7 +80,7 @@ const HomeScreen = ({ navigation }) => {
           initialNumToRender={10}
           ItemSeparatorComponent={() => <ItemSeparator />}
           keyExtractor={item => item.email}
-          removeClippedSubviews={true}
+          removeClippedSubviews={false}
           renderItem={({ item }) => (
             <TouchableOpacity
               activeOpacity={0.9}

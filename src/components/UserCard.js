@@ -37,6 +37,7 @@ export const UserCard = ({ content, query, summary, ...props }) => {
 
 UserCard.propTypes = {
   content: PropTypes.string,
+  query: PropTypes.string,
   summary: PropTypes.shape({
     address: PropTypes.string.isRequired,
     avatar: PropTypes.string.isRequired,
@@ -48,4 +49,5 @@ UserCard.propTypes = {
 
 UserCard.defaultProps = {
   content: '',
+  query: '',
 };

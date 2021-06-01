@@ -1,6 +1,5 @@
-import React, { useEffect, useCallback } from 'react';
+import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { Linking } from 'react-native';
 import styled from '@emotion/native';
 import { QueryClient, QueryClientProvider, setLogger } from 'react-query';
 import { NavigationContainer } from '@react-navigation/native';
@@ -11,7 +10,7 @@ import Router from '@router';
 import theme from '@theme';
 
 const StyledSafeArea = styled(SafeAreaProvider)`
-  background-color: ${({ thene }) => theme.colors.background};
+  background-color: ${theme.colors.background};
 `;
 
 const queryClient = new QueryClient();
