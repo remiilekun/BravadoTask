@@ -15,7 +15,7 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import { Text } from '../components';
+import { Searchbar, Text } from '@components';
 
 const Section = ({ children, title }) => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -57,6 +57,7 @@ const App = () => {
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
         <Header />
+        <Searchbar />
         <View
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
