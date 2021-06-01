@@ -19,10 +19,10 @@ const ContentDivider = styled.View`
   width: 100%;
 `;
 
-export const PostCard = ({ summary, content, ...props }) => {
+export const PostCard = ({ content, query, summary, ...props }) => {
   return (
     <Wrapper {...props}>
-      <PostSummary {...summary} />
+      <PostSummary {...summary} query={query} />
       {content ? (
         <>
           <ContentDivider />

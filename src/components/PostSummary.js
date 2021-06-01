@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
+import { View } from 'react-native';
 import styled from '@emotion/native';
 import FastImage from 'react-native-fast-image';
 import Bookmark from '@assets/svg/bookmark.svg';
 import Bookmarked from '@assets/svg/bookmarked.svg';
+import escapeRegExp from 'lodash.escaperegexp';
 import { useBookmarks } from '@hooks';
 import { Text } from './Text';
+
+const subtitleProps = { fontSize: 'msm', fontWeight: 'semibold' };
 
 const Wrapper = styled.View`
   align-items: center;
@@ -34,32 +38,79 @@ const Image = styled(FastImage)`
   width: 105px;
 `;
 
-const Subtitle = styled(props => (
-  <Text fontSize="msm" fontWeight="semibold" {...props} />
-))``;
-
 const BookmarkWrapper = styled.TouchableOpacity`
   position: absolute;
-  top: 8px;
   right: 8px;
+  top: 8px;
 `;
 
-export const PostSummary = ({ address, avatar, email, name, title }) => {
+const HighlightedText = memo(({ text = '', highlight = '', textProps }) => {
+  if (!highlight.trim()) {
+    return <Text {...textProps}>{text}</Text>;
+  }
+  const regex = new RegExp(`(${escapeRegExp(highlight)})`, 'gi');
+  const parts = text.split(regex);
+  return (
+    <Text {...textProps}>
+      {parts
+        .filter(part => part)
+        .map((part, i) =>
+          regex.test(part) ? (
+            <Text key={i} backgroundColor="yellow" {...textProps}>
+              {part}
+            </Text>
+          ) : (
+            <Text key={i} {...textProps}>
+              {part}
+            </Text>
+          ),
+        )}
+    </Text>
+  );
+});
+
+export const PostSummary = ({ address, avatar, email, name, query, title }) => {
   const { bookmarks, toggleBookmark } = useBookmarks();
   const isBookmarked = bookmarks?.includes(email);
 
   return (
     <Wrapper>
       <Details>
-        <Text color="black" fontSize="lg" fontWeight="semibold">
-          {name}
-        </Text>
+        <View>
+          <HighlightedText
+            text={name}
+            highlight={query}
+            textProps={{
+              color: 'black',
+              fontSize: 'lg',
+              fontWeight: 'semibold',
+            }}
+          />
+        </View>
         <Gap />
-        <Subtitle>{email}</Subtitle>
+        <View>
+          <HighlightedText
+            text={email}
+            highlight={query}
+            textProps={subtitleProps}
+          />
+        </View>
         <Gap />
-        <Subtitle>{title}</Subtitle>
+        <View>
+          <HighlightedText
+            text={title}
+            highlight={query}
+            textProps={subtitleProps}
+          />
+        </View>
         <Gap />
-        <Subtitle>{address}</Subtitle>
+        <View>
+          <HighlightedText
+            text={address}
+            highlight={query}
+            textProps={subtitleProps}
+          />
+        </View>
       </Details>
 
       <ImageWrapper>
@@ -85,5 +136,10 @@ PostSummary.propTypes = {
   avatar: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
+  query: PropTypes.string,
   title: PropTypes.string.isRequired,
+};
+
+PostSummary.defaultProps = {
+  query: '',
 };

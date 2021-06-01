@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { FlatList, RefreshControl, TouchableOpacity } from 'react-native';
 import styled from '@emotion/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -15,11 +15,13 @@ const ItemSeparator = styled.View`
 `;
 
 const HomeScreen = ({ navigation }) => {
+  const [query, setQuery] = useState('');
+
   const { isLoading, data, refetch } = useQuery('posts', async () => {
-    const { data } = await axios.get(
+    const { data: responseData } = await axios.get(
       'https://gist.githubusercontent.com/allaud/093aa499998b7843bb10b44ea6ea02dc/raw/c400744999bf4b308f67807729a6635ced0c8644/users.json',
     );
-    return data;
+    return responseData;
   });
 
   const handlePostPress = summary => {
@@ -28,15 +30,31 @@ const HomeScreen = ({ navigation }) => {
     });
   };
 
+  const filteredData = useMemo(() => {
+    if (data?.length) {
+      return data?.filter(o =>
+        Object.entries(o).some(entry =>
+          String(entry[1]).toLowerCase().includes(query),
+        ),
+      );
+    }
+
+    return [];
+  }, [data, query]);
+
   return (
     <SafeAreaView>
       <PageWrapper>
         <SearchbarWrapper>
-          <Searchbar />
+          <Searchbar value={query} onChangeText={setQuery} />
         </SearchbarWrapper>
 
         <FlatList
+          data={filteredData}
           initialNumToRender={10}
+          ItemSeparatorComponent={() => <ItemSeparator />}
+          keyExtractor={item => item.email}
+          removeClippedSubviews={true}
           refreshControl={
             <RefreshControl
               refreshing={isLoading}
@@ -44,14 +62,11 @@ const HomeScreen = ({ navigation }) => {
               tintColor="#000"
             />
           }
-          data={data}
-          ItemSeparatorComponent={() => <ItemSeparator />}
-          keyExtractor={item => item.email}
           renderItem={({ item }) => (
             <TouchableOpacity
               activeOpacity={0.9}
               onPress={() => handlePostPress(item)}>
-              <PostCard summary={item} />
+              <PostCard summary={item} query={query} />
             </TouchableOpacity>
           )}
         />

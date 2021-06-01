@@ -13,6 +13,7 @@ const Wrapper = styled.View`
 `;
 
 const Input = styled.TextInput`
+  flex: 1;
   padding: 0 10px;
 `;
 
@@ -20,7 +21,13 @@ export const Searchbar = props => {
   return (
     <Wrapper>
       <Search />
-      <Input placeholder="Search..." {...props} />
+      <Input
+        autoCapitalize="none"
+        placeholder="Search..."
+        autoCorrect={false}
+        returnKeyType="done"
+        {...props}
+      />
     </Wrapper>
   );
 };
