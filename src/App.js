@@ -3,6 +3,7 @@ import styled from '@emotion/native';
 import { QueryClient, QueryClientProvider, setLogger } from 'react-query';
 import { NavigationContainer } from '@react-navigation/native';
 import { ThemeProvider } from '@emotion/react';
+import { BookmarkProvider } from '@contexts/BookmarkContext';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Router from '@router';
 import theme from '@theme';
@@ -24,9 +25,11 @@ const App = () => {
     <StyledSafeArea>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>
-          <NavigationContainer>
-            <Router />
-          </NavigationContainer>
+          <BookmarkProvider>
+            <NavigationContainer>
+              <Router />
+            </NavigationContainer>
+          </BookmarkProvider>
         </ThemeProvider>
       </QueryClientProvider>
     </StyledSafeArea>

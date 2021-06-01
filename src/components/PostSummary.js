@@ -4,6 +4,7 @@ import styled from '@emotion/native';
 import FastImage from 'react-native-fast-image';
 import Bookmark from '@assets/svg/bookmark.svg';
 import Bookmarked from '@assets/svg/bookmarked.svg';
+import { useBookmarks } from '@hooks';
 import { Text } from './Text';
 
 const Wrapper = styled.View`
@@ -28,24 +29,25 @@ const ImageWrapper = styled.View`
   flex-shrink: 0;
 `;
 
+const Image = styled(FastImage)`
+  height: 105px;
+  width: 105px;
+`;
+
 const Subtitle = styled(props => (
   <Text fontSize="msm" fontWeight="semibold" {...props} />
 ))``;
 
-const BookmarkWrapper = styled.View`
+const BookmarkWrapper = styled.TouchableOpacity`
   position: absolute;
   top: 8px;
   right: 8px;
 `;
 
-export const PostSummary = ({
-  address,
-  avatar,
-  email,
-  isBookmarked,
-  name,
-  title,
-}) => {
+export const PostSummary = ({ address, avatar, email, name, title }) => {
+  const { bookmarks, toggleBookmark } = useBookmarks();
+  const isBookmarked = bookmarks?.includes(email);
+
   return (
     <Wrapper>
       <Details>
@@ -61,15 +63,16 @@ export const PostSummary = ({
       </Details>
 
       <ImageWrapper>
-        <FastImage
-          style={{ width: 105, height: 105 }}
+        <Image
           source={{
             uri: avatar,
           }}
           resizeMode={FastImage.resizeMode.contain}
         />
 
-        <BookmarkWrapper>
+        <BookmarkWrapper
+          activeOpacity={0.9}
+          onPress={() => toggleBookmark(email)}>
           {isBookmarked ? <Bookmarked /> : <Bookmark />}
         </BookmarkWrapper>
       </ImageWrapper>
