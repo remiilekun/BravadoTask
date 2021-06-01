@@ -1,16 +1,35 @@
 import React from 'react';
+import styled from '@emotion/native';
+import { QueryClient, QueryClientProvider, setLogger } from 'react-query';
 import { NavigationContainer } from '@react-navigation/native';
 import { ThemeProvider } from '@emotion/react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Router from '@router';
 import theme from '@theme';
 
+const StyledSafeArea = styled(SafeAreaProvider)`
+  background-color: ${({ thene }) => theme.colors.background};
+`;
+
+const queryClient = new QueryClient();
+
+setLogger({
+  log: console.log,
+  warn: console.warn,
+  error: console.warn,
+});
+
 const App = () => {
   return (
-    <ThemeProvider theme={theme}>
-      <NavigationContainer>
-        <Router />
-      </NavigationContainer>
-    </ThemeProvider>
+    <StyledSafeArea>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider theme={theme}>
+          <NavigationContainer>
+            <Router />
+          </NavigationContainer>
+        </ThemeProvider>
+      </QueryClientProvider>
+    </StyledSafeArea>
   );
 };
 

@@ -10,10 +10,10 @@ const Wrapper = styled.View`
   padding: 8px;
 `;
 
-export const PostCard = props => {
+export const PostCard = ({ summary, ...props }) => {
   return (
-    <Wrapper>
-      <PostSummary {...props} />
+    <Wrapper {...props}>
+      <PostSummary {...summary} />
     </Wrapper>
   );
 };

@@ -1,3 +1,4 @@
+export * from './PageWrapper';
 export * from './PostCard';
 export * from './PostSummary';
 export * from './Searchbar';

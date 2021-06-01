@@ -15,6 +15,7 @@ const Wrapper = styled.View`
 const Details = styled.View`
   flex-direction: column;
   margin-right: 12px;
+  flex: 1;
 `;
 
 const Gap = styled.View`
@@ -24,6 +25,7 @@ const Gap = styled.View`
 const ImageWrapper = styled.View`
   background-color: ${({ theme }) => theme.colors.grey[50]};
   border-radius: 4px;
+  flex-shrink: 0;
 `;
 
 const Subtitle = styled(props => (

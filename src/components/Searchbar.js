@@ -20,7 +20,7 @@ export const Searchbar = props => {
   return (
     <Wrapper>
       <Search />
-      <Input {...props} />
+      <Input placeholder="Search..." {...props} />
     </Wrapper>
   );
 };
