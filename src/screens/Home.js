@@ -3,8 +3,7 @@ import { FlatList, TouchableOpacity, Linking } from 'react-native';
 import styled from '@emotion/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { PageWrapper, UserCard, Searchbar } from '@components';
-import USERS from '@data/users';
-import { useDebounce } from '@hooks';
+import { useDebounce, useGetUsers } from '@hooks';
 
 const SearchbarWrapper = styled.View`
   margin-bottom: 20px;
@@ -16,31 +15,8 @@ const ItemSeparator = styled.View`
 
 const HomeScreen = ({ navigation }) => {
   const [query, setQuery] = useState('');
-  const [data, setData] = useState([]);
-  const [cache, setCache] = useState({});
   const debouncedQuery = useDebounce(query);
-
-  useEffect(() => {
-    if (USERS?.length) {
-      if (!debouncedQuery) {
-        setData([...USERS]);
-      } else if (cache[debouncedQuery]) {
-        setData([...cache[debouncedQuery]]);
-      } else {
-        const filtered = USERS?.filter(obj =>
-          Object.entries(obj).some(
-            ([key, value]) =>
-              key !== 'avatar' &&
-              String(value).toLowerCase().includes(debouncedQuery),
-          ),
-        );
-        setCache(v => ({ ...v, [debouncedQuery]: filtered }));
-        setData([...filtered]);
-      }
-    } else {
-      setData([]);
-    }
-  }, [debouncedQuery, cache]);
+  const { data } = useGetUsers(debouncedQuery);
 
   const navigateToUrl = url => {
     if (url) {
